@@ -48,6 +48,8 @@ class SNXSimulator:
         if match:
             offset = int(match.group(1))
             reg_idx = self._get_reg_idx(match.group(2))
+
+            # EA <- I + (Rb == $0)? 0 : Rb
             base_val = 0 if reg_idx == 0 else self.regs[reg_idx]
             return offset + base_val
         raise ValueError(f"Invalid address format: {addr_str}")
