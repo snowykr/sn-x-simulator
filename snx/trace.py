@@ -1,0 +1,18 @@
+from __future__ import annotations
+
+from typing import Sequence
+
+
+def format_trace_header(reg_count: int = 4) -> str:
+    reg_headers = " | ".join(f"${i:<2}" for i in range(reg_count))
+    return f"| PC  | INST            | {reg_headers} |"
+
+
+def format_trace_separator(reg_count: int = 4) -> str:
+    reg_seps = " | ".join("---" for _ in range(reg_count))
+    return f"| --- | --------------- | {reg_seps} |"
+
+
+def format_trace_row(pc: int, inst_raw: str, regs: Sequence[int]) -> str:
+    reg_vals = " | ".join(f"{r:<3}" for r in regs)
+    return f"| {pc:<3} | {inst_raw:<15} | {reg_vals} |"
