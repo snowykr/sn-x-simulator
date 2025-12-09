@@ -74,6 +74,7 @@ class SNXSimulator:
 
     def _calc_effective_addr(self, operand: AddressOperand) -> int:
         base_idx = operand.base.index
+        # EA <- I + (Rb == $0)? 0 : Rb
         base_val = 0 if base_idx == 0 else self.regs[base_idx]
         return operand.offset + base_val
 
