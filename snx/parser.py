@@ -93,7 +93,6 @@ class Parser:
 
         label: LabelDef | None = None
         instruction: InstructionNode | None = None
-        comment: str | None = None
 
         if self._check(TokenKind.IDENT) and self._peek(1).kind == TokenKind.COLON:
             label = self._parse_label_def()
@@ -104,7 +103,7 @@ class Parser:
         while not self._check(TokenKind.EOL) and not self._check(TokenKind.EOF):
             self._advance()
 
-        return Line(line_no, label, instruction, comment, raw)
+        return Line(line_no, label, instruction, raw)
 
     def _parse_label_def(self) -> LabelDef:
         ident_tok = self._advance()

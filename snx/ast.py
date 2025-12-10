@@ -79,7 +79,6 @@ class Line:
     line_no: int
     label: LabelDef | None
     instruction: InstructionNode | None
-    comment: str | None
     raw: str
 
 
