@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 from snx.ast import (
     AddressOperand,
@@ -11,6 +11,9 @@ from snx.ast import (
     RegisterOperand,
 )
 from snx.compiler import compile_program
+
+if TYPE_CHECKING:
+    from snx.compiler import CompileResult
 
 
 class SNXSimulator:
@@ -35,6 +38,28 @@ class SNXSimulator:
         self._labels = ir_program.labels
 
     @classmethod
+    def from_compile_result(
+        cls,
+        result: "CompileResult",
+        *,
+        mem_size: int = 128,
+        trace_callback: Callable[[int, str, list[int]], None] | None = None,
+    ) -> SNXSimulator:
+        if result.has_errors():
+            raise ValueError(
+                f"Cannot create simulator from CompileResult with errors:\n"
+                f"{result.format_diagnostics()}"
+            )
+        if result.ir is None:
+            raise ValueError("CompileResult contains no IR.")
+        return cls(
+            result.ir,
+            reg_count=result.reg_count,
+            mem_size=mem_size,
+            trace_callback=trace_callback,
+        )
+
+    @classmethod
     def from_source(
         cls,
         code_str: str,
@@ -44,14 +69,8 @@ class SNXSimulator:
         trace_callback: Callable[[int, str, list[int]], None] | None = None,
     ) -> SNXSimulator:
         result = compile_program(code_str, reg_count=reg_count)
-        if result.has_errors():
-            error_messages = "\n".join(str(d) for d in result.diagnostics)
-            raise ValueError(f"Compilation error:\n{error_messages}")
-        if result.ir is None:
-            raise ValueError("Compilation produced no result.")
-        return cls(
-            result.ir,
-            reg_count=reg_count,
+        return cls.from_compile_result(
+            result,
             mem_size=mem_size,
             trace_callback=trace_callback,
         )

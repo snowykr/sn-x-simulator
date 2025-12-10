@@ -18,6 +18,7 @@ class CompileResult:
     program: Program | None
     ir: IRProgram | None
     diagnostics: list[Diagnostic]
+    reg_count: int = 4
     cfg: CFG | None = None
     dataflow: DataflowResult | None = None
 
@@ -101,6 +102,7 @@ def compile_program(
         program=program,
         ir=ir,
         diagnostics=diagnostics.diagnostics,
+        reg_count=reg_count,
         cfg=cfg,
         dataflow=dataflow,
     )

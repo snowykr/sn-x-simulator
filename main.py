@@ -54,7 +54,7 @@ def main() -> None:
         init_flags = sim.get_reg_init_flags()
         print(format_trace_row(pc, inst_raw, regs, init_flags))
 
-    sim = SNXSimulator.from_source(SAMPLE_PROGRAM, trace_callback=trace_printer)
+    sim = SNXSimulator.from_compile_result(result, trace_callback=trace_printer)
 
     print("=== Execution Trace ===")
     print(format_trace_header())
