@@ -10,7 +10,7 @@ from snx.ast import (
     Opcode,
     RegisterOperand,
 )
-from snx.compiler import CompileResult, compile_program
+from snx.compiler import compile_program
 
 
 class SNXSimulator:
