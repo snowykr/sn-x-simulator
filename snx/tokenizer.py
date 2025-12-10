@@ -146,7 +146,6 @@ class Tokenizer:
         self._add_token(TokenKind.REGISTER, lexeme, lexeme.upper())
 
     def _scan_number(self) -> None:
-        start_col = self._col
         lexeme = ""
 
         if self._peek() in "+-":
@@ -158,7 +157,6 @@ class Tokenizer:
         self._add_token(TokenKind.NUMBER, lexeme, lexeme)
 
     def _scan_identifier(self) -> None:
-        start_col = self._col
         lexeme = ""
 
         while self._peek().isalnum() or self._peek() == "_":
