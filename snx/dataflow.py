@@ -13,6 +13,7 @@ from snx.ast import (
     RegisterOperand,
 )
 from snx.cfg import CFG, build_cfg
+from snx.constants import DEFAULT_REG_COUNT
 
 if TYPE_CHECKING:
     pass
@@ -96,7 +97,7 @@ class DataflowAnalyzer:
         ir_program: IRProgram,
         cfg: CFG,
         *,
-        reg_count: int = 4,
+        reg_count: int = DEFAULT_REG_COUNT,
     ) -> None:
         self._ir_program = ir_program
         self._cfg = cfg
@@ -315,7 +316,7 @@ def analyze_dataflow(
     ir_program: IRProgram,
     cfg: CFG | None = None,
     *,
-    reg_count: int = 4,
+    reg_count: int = DEFAULT_REG_COUNT,
 ) -> DataflowResult:
     if cfg is None:
         cfg = build_cfg(ir_program)

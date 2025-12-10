@@ -13,6 +13,7 @@ from snx.ast import (
     Program,
     RegisterOperand,
 )
+from snx.constants import DEFAULT_REG_COUNT
 from snx.diagnostics import DiagnosticCollector, RelatedInfo, SourceSpan
 
 if TYPE_CHECKING:
@@ -42,7 +43,7 @@ class AnalysisResult:
 
 
 class Analyzer:
-    def __init__(self, program: Program, diagnostics: DiagnosticCollector, *, reg_count: int = 4) -> None:
+    def __init__(self, program: Program, diagnostics: DiagnosticCollector, *, reg_count: int = DEFAULT_REG_COUNT) -> None:
         self._program = program
         self._diagnostics = diagnostics
         self._reg_count = reg_count
@@ -192,7 +193,7 @@ def analyze(
     program: Program,
     diagnostics: DiagnosticCollector | None = None,
     *,
-    reg_count: int = 4,
+    reg_count: int = DEFAULT_REG_COUNT,
 ) -> AnalysisResult:
     if diagnostics is None:
         diagnostics = DiagnosticCollector()

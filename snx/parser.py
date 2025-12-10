@@ -13,6 +13,7 @@ from snx.ast import (
     Program,
     RegisterOperand,
 )
+from snx.constants import DEFAULT_REG_COUNT
 from snx.diagnostics import DiagnosticCollector, SourceSpan
 from snx.tokenizer import Token, TokenKind, tokenize
 
@@ -259,7 +260,7 @@ def parse(source: str, diagnostics: DiagnosticCollector | None = None) -> ParseR
     return ParseResult(program=program, diagnostics=diagnostics.diagnostics)
 
 
-def parse_code(code_str: str, *, reg_count: int = 4) -> tuple[list[Instruction], dict[str, int]]:
+def parse_code(code_str: str, *, reg_count: int = DEFAULT_REG_COUNT) -> tuple[list[Instruction], dict[str, int]]:
     from snx.compiler import compile_program
 
     result = compile_program(code_str, reg_count=reg_count)

@@ -11,6 +11,7 @@ from snx.ast import (
     RegisterOperand,
 )
 from snx.compiler import compile_program
+from snx.constants import DEFAULT_MEM_SIZE, DEFAULT_REG_COUNT
 
 if TYPE_CHECKING:
     from snx.compiler import CompileResult
@@ -21,8 +22,8 @@ class SNXSimulator:
         self,
         ir_program: IRProgram,
         *,
-        reg_count: int = 4,
-        mem_size: int = 128,
+        reg_count: int = DEFAULT_REG_COUNT,
+        mem_size: int = DEFAULT_MEM_SIZE,
         trace_callback: Callable[[int, str, list[int]], None] | None = None,
     ):
         self.regs: list[int] = [0] * reg_count
@@ -42,7 +43,7 @@ class SNXSimulator:
         cls,
         result: "CompileResult",
         *,
-        mem_size: int = 128,
+        mem_size: int = DEFAULT_MEM_SIZE,
         trace_callback: Callable[[int, str, list[int]], None] | None = None,
     ) -> SNXSimulator:
         if result.has_errors():
@@ -64,8 +65,8 @@ class SNXSimulator:
         cls,
         code_str: str,
         *,
-        reg_count: int = 4,
-        mem_size: int = 128,
+        reg_count: int = DEFAULT_REG_COUNT,
+        mem_size: int = DEFAULT_MEM_SIZE,
         trace_callback: Callable[[int, str, list[int]], None] | None = None,
     ) -> SNXSimulator:
         result = compile_program(code_str, reg_count=reg_count)

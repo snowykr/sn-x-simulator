@@ -10,6 +10,7 @@ from snx.cfg import (
     find_reachable_pcs,
     find_infinite_loop_sccs,
 )
+from snx.constants import DEFAULT_REG_COUNT
 from snx.dataflow import (
     DataflowResult,
     analyze_dataflow,
@@ -67,7 +68,7 @@ class StaticChecker:
         ir: IRProgram,
         diagnostics: DiagnosticCollector,
         *,
-        reg_count: int = 4,
+        reg_count: int = DEFAULT_REG_COUNT,
     ) -> None:
         self._program = program
         self._ir = ir
@@ -201,7 +202,7 @@ def check_program(
     ir: IRProgram,
     diagnostics: DiagnosticCollector | None = None,
     *,
-    reg_count: int = 4,
+    reg_count: int = DEFAULT_REG_COUNT,
 ) -> CheckResult:
     if diagnostics is None:
         diagnostics = DiagnosticCollector()

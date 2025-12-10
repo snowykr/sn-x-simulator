@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from snx.analyzer import analyze
 from snx.ast import IRProgram, Program
+from snx.constants import DEFAULT_REG_COUNT
 from snx.diagnostics import Diagnostic, DiagnosticCollector, Severity
 from snx.parser import parse
 
@@ -18,7 +19,7 @@ class CompileResult:
     program: Program | None
     ir: IRProgram | None
     diagnostics: list[Diagnostic]
-    reg_count: int = 4
+    reg_count: int = DEFAULT_REG_COUNT
     cfg: CFG | None = None
     dataflow: DataflowResult | None = None
 
@@ -53,7 +54,7 @@ def _compile_internal(
     source: str,
     diagnostics: DiagnosticCollector,
     *,
-    reg_count: int = 4,
+    reg_count: int = DEFAULT_REG_COUNT,
     run_static_checks: bool = True,
 ) -> tuple[Program | None, IRProgram | None, "CFG | None", "DataflowResult | None"]:
     parse_result = parse(source, diagnostics)
@@ -87,7 +88,7 @@ def _compile_internal(
 def compile_program(
     source: str,
     *,
-    reg_count: int = 4,
+    reg_count: int = DEFAULT_REG_COUNT,
     run_static_checks: bool = True,
 ) -> CompileResult:
     diagnostics = DiagnosticCollector()

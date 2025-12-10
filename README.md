@@ -46,18 +46,23 @@ The SN-X toolchain performs several static checks before executing a program, si
 
 These checks are integrated into the compiler and simulator:
 
-- `compile_program(source: str, *, reg_count: int = 4, run_static_checks: bool = True)`
+- `compile_program(source: str, *, reg_count: int = DEFAULT_REG_COUNT, run_static_checks: bool = True)`
   - parses and analyzes the source program,
   - runs static analysis by default,
   - returns a `CompileResult` containing:
     - `program`: high-level AST (`Program`) or `None` on failure,
     - `ir`: lowered `IRProgram` or `None` if analysis failed,
     - `diagnostics`: list of all errors and warnings,
+    - `reg_count`: the register count used for static analysis (default: 4),
     - `cfg`: the control-flow graph (when static checks are enabled),
     - `dataflow`: dataflow analysis result (when static checks are enabled).
   - helper methods:
     - `has_errors()` / `has_warnings()`
     - `format_diagnostics()` to pretty-print diagnostics.
+
+- Default constants are defined in `snx/constants.py`:
+  - `DEFAULT_REG_COUNT = 4`
+  - `DEFAULT_MEM_SIZE = 128`
 
 Example: running static checks from Python without executing the simulator:
 
@@ -81,7 +86,38 @@ if result.has_errors():
     raise SystemExit(1)
 ```
 
-- `SNXSimulator.from_source(source: str, ...)` internally uses `compile_program` with static checks enabled and raises `ValueError` if compilation or static analysis reports any errors.
+- `SNXSimulator.from_compile_result(result: CompileResult, *, mem_size: int = DEFAULT_MEM_SIZE, trace_callback=None)`
+  - creates a simulator from an existing `CompileResult`,
+  - raises `ValueError` if the result contains errors or has no IR,
+  - uses `result.reg_count` to configure the simulator's register count.
+
+- `SNXSimulator.from_source(source: str, *, reg_count: int = DEFAULT_REG_COUNT, mem_size: int = DEFAULT_MEM_SIZE, trace_callback=None)`
+  - convenience method that internally calls `compile_program` then `from_compile_result`,
+  - raises `ValueError` if compilation or static analysis reports any errors.
+
+### Recommended Pattern: Compile Once, Reuse IR
+
+When you want to display diagnostics before running the simulator, use `compile_program` followed by `from_compile_result` to avoid compiling twice:
+
+```python
+from snx import compile_program, SNXSimulator
+
+source = """
+main:
+    LDA $1, 5($0)
+    HLT
+"""
+
+result = compile_program(source)
+print(result.format_diagnostics())
+
+if result.has_errors():
+    raise SystemExit(1)
+
+sim = SNXSimulator.from_compile_result(result)
+sim.run()
+print(f"Final registers: {sim.regs}")
+```
 
 ## Architecture and Instruction Summary
 
