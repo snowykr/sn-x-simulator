@@ -24,7 +24,6 @@ class SNXSimulator:
     ):
         self.regs: list[int] = [0] * reg_count
         self.memory: list[int] = [0] * mem_size
-        self._reg_count = reg_count
         self._reg_initialized: list[bool] = [False] * reg_count
         self._mem_initialized: list[bool] = [False] * mem_size
         self.pc: int = 0

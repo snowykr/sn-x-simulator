@@ -12,7 +12,7 @@ from snx.ast import (
     Opcode,
     RegisterOperand,
 )
-from snx.cfg import CFG, build_cfg, EdgeKind
+from snx.cfg import CFG, build_cfg
 from snx.diagnostics import DiagnosticCollector, SourceSpan, RelatedInfo
 
 if TYPE_CHECKING:

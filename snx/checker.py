@@ -195,15 +195,6 @@ class StaticChecker:
                     issue.message,
                     span,
                 )
-        
-        for pc in sorted(self._dataflow.unreachable_pcs):
-            line_no = self._pc_to_line.get(pc)
-            if line_no is not None:
-                span = self._line_spans.get(line_no)
-                if span:
-                    existing_codes = {d.code for d in self._diagnostics.diagnostics}
-                    if "W001" not in existing_codes:
-                        pass
 
 
 def check_program(
