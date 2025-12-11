@@ -3,16 +3,43 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from snx.compiler import compile_program
+from snx.compiler import CompileResult, compile_program
+from snx.diagnostics import Severity
 from snx.simulator import SNXSimulator
 from snx.trace import format_trace_header, format_trace_row, format_trace_separator
+
+
+def _format_diagnostics_with_label(result: CompileResult, label: str | None) -> str:
+    if not result.diagnostics:
+        return "No issues found."
+
+    lines: list[str] = []
+    errors = [d for d in result.diagnostics if d.severity == Severity.ERROR]
+    warnings = [d for d in result.diagnostics if d.severity == Severity.WARNING]
+
+    def format_location(span: object) -> str:
+        if label is not None:
+            return f"{label}:{span}"
+        return str(span)
+
+    if errors:
+        lines.append(f"=== {len(errors)} Error(s) ===")
+        for d in errors:
+            lines.append(f"[{d.code}] {d.severity.value}: {d.message} at {format_location(d.span)}")
+
+    if warnings:
+        lines.append(f"=== {len(warnings)} Warning(s) ===")
+        for d in warnings:
+            lines.append(f"[{d.code}] {d.severity.value}: {d.message} at {format_location(d.span)}")
+
+    return "\n".join(lines)
 
 
 def run_program_from_source(source: str, *, label: str | None = None) -> int:
     result = compile_program(source)
 
     print("=== Static Analysis Result ===")
-    print(result.format_diagnostics())
+    print(_format_diagnostics_with_label(result, label))
     print()
 
     if result.has_errors():
