@@ -172,11 +172,38 @@ All instructions are 16-bit fixed length.
 
 ### Simulator Implementation Status
 
-This simulator currently implements the following instructions:
+This simulator implements the **complete SN/X instruction set**:
 
-`ADD`, `AND`, `SLT`, `NOT`, `SR`, `LDA`, `LD`, `ST`, `BZ`, `BAL`, `HLT`
+`ADD`, `AND`, `SUB`, `SLT`, `NOT`, `SR`, `HLT`, `LD`, `ST`, `LDA`, `IN`, `OUT`, `BZ`, `BAL`
 
-**Not yet implemented:** `SUB`, `IN`, `OUT`
+### 16-bit Word Model
+
+All register and memory values are strictly 16-bit words (0x0000–0xFFFF):
+- Arithmetic operations wrap around on overflow/underflow.
+- `SLT` compares values as signed 16-bit integers (two's complement).
+- Effective addresses are computed as 16-bit values.
+
+### I/O Model
+
+The simulator supports `IN` and `OUT` instructions via callback functions:
+
+```python
+from snx import SNXSimulator
+
+def my_input() -> int:
+    return int(input("Enter value: "))
+
+def my_output(value: int) -> None:
+    print(f"Output: {value}")
+
+sim = SNXSimulator.from_source(source, input_fn=my_input, output_fn=my_output)
+sim.run()
+
+print(sim.get_output_buffer())
+```
+
+- **IN:** Reads a 16-bit value from `input_fn()`. Returns 0 if no callback is set.
+- **OUT:** Writes a 16-bit value via `output_fn()`. Values are also stored in an internal buffer accessible via `get_output_buffer()`.
 
 ### Memory in This Simulator
 
@@ -265,7 +292,7 @@ The following context-free grammar (CFG), written in BNF, defines the concrete s
 
 **Notes:**
 - When `<address-operand>` is written as just `NUMBER` (without parentheses), the base register defaults to `$0`.
-- `<mnemonic>` is matched against the supported opcodes (`ADD`, `AND`, `SLT`, `NOT`, `SR`, `LDA`, `LD`, `ST`, `BZ`, `BAL`, `HLT`). Unknown mnemonics produce a diagnostic error.
+- `<mnemonic>` is matched against the supported opcodes (`ADD`, `AND`, `SUB`, `SLT`, `NOT`, `SR`, `HLT`, `LD`, `ST`, `LDA`, `IN`, `OUT`, `BZ`, `BAL`). Unknown mnemonics produce a diagnostic error.
 - Labels and mnemonics are case-insensitive.
 
 ### Operand Types by Instruction
@@ -274,12 +301,15 @@ The following context-free grammar (CFG), written in BNF, defines the concrete s
 |-------------|-----------------|----------------------------|-----------------|
 | ADD         | Register        | Register                   | Register        |
 | AND         | Register        | Register                   | Register        |
+| SUB         | Register        | Register                   | Register        |
 | SLT         | Register        | Register                   | Register        |
 | NOT         | Register        | Register                   |                 |
 | SR          | Register        | Register                   |                 |
-| LDA         | Register        | Address                    |                 |
+| HLT         |                 |                            |                 |
 | LD          | Register        | Address                    |                 |
 | ST          | Register        | Address                    |                 |
+| LDA         | Register        | Address                    |                 |
+| IN          | Register        |                            |                 |
+| OUT         | Register        |                            |                 |
 | BZ          | Register        | Label                      |                 |
 | BAL         | Register        | Label or Address           |                 |
-| HLT         |                 |                            |                 |

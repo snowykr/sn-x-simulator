@@ -23,15 +23,18 @@ if TYPE_CHECKING:
 OPCODE_OPERAND_SPEC: dict[Opcode, tuple[int, tuple[type, ...]]] = {
     Opcode.ADD: (3, (RegisterOperand, RegisterOperand, RegisterOperand)),
     Opcode.AND: (3, (RegisterOperand, RegisterOperand, RegisterOperand)),
+    Opcode.SUB: (3, (RegisterOperand, RegisterOperand, RegisterOperand)),
     Opcode.SLT: (3, (RegisterOperand, RegisterOperand, RegisterOperand)),
     Opcode.NOT: (2, (RegisterOperand, RegisterOperand)),
     Opcode.SR: (2, (RegisterOperand, RegisterOperand)),
-    Opcode.LDA: (2, (RegisterOperand, AddressOperand)),
+    Opcode.HLT: (0, ()),
     Opcode.LD: (2, (RegisterOperand, AddressOperand)),
     Opcode.ST: (2, (RegisterOperand, AddressOperand)),
+    Opcode.LDA: (2, (RegisterOperand, AddressOperand)),
+    Opcode.IN: (1, (RegisterOperand,)),
+    Opcode.OUT: (1, (RegisterOperand,)),
     Opcode.BZ: (2, (RegisterOperand, LabelRefOperand)),
     Opcode.BAL: (2, (RegisterOperand, (LabelRefOperand, AddressOperand))),
-    Opcode.HLT: (0, ()),
 }
 
 

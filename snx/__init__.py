@@ -5,6 +5,7 @@ from snx.trace import format_trace_header, format_trace_row
 from snx.cfg import CFG, build_cfg
 from snx.dataflow import DataflowResult, analyze_dataflow
 from snx.checker import check_program, CheckResult
+from snx.word import word, signed16, WORD_MASK, WORD_BITS
 
 __all__ = [
     "SNXSimulator",
@@ -20,4 +21,8 @@ __all__ = [
     "analyze_dataflow",
     "check_program",
     "CheckResult",
+    "word",
+    "signed16",
+    "WORD_MASK",
+    "WORD_BITS",
 ]

@@ -231,7 +231,7 @@ class DataflowAnalyzer:
                     out_state.stack_slots[slot_key] = src_state
             successors.append(pc + 1)
             
-        elif opcode in (Opcode.ADD, Opcode.AND, Opcode.SLT):
+        elif opcode in (Opcode.ADD, Opcode.AND, Opcode.SUB, Opcode.SLT):
             dest = operands[0]
             if isinstance(dest, RegisterOperand):
                 out_state.registers[dest.index] = ValueState.DATA
@@ -241,6 +241,15 @@ class DataflowAnalyzer:
             dest = operands[0]
             if isinstance(dest, RegisterOperand):
                 out_state.registers[dest.index] = ValueState.DATA
+            successors.append(pc + 1)
+            
+        elif opcode == Opcode.IN:
+            dest = operands[0]
+            if isinstance(dest, RegisterOperand):
+                out_state.registers[dest.index] = ValueState.DATA
+            successors.append(pc + 1)
+            
+        elif opcode == Opcode.OUT:
             successors.append(pc + 1)
             
         elif opcode == Opcode.BZ:
