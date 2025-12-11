@@ -165,12 +165,20 @@ All instructions are 16-bit fixed length.
 | `0xA` | **LDA** | I | `R1 = Base + Imm` (load address / immediate) |
 | `0xC` | **IN** | I | `R1 = Input_Port` |
 | `0xD` | **OUT** | I | `Output_Port = R1` |
-| `0xE` | **BZ** | I | `if (R1 == 0) PC = PC + Imm` (branch if zero) |
-| `0xF` | **BAL** | I | `R1 = PC + 1; PC = PC + Imm` (branch and link) |
+| `0xE` | **BZ** | I | `if (R1 == 0) PC = Target` (branch if zero) |
+| `0xF` | **BAL** | I | `R1 = PC + 1; PC = Target` (branch and link) |
 
 **Branch Instructions:**
 - **BZ:** Branches to target label if the condition register equals zero.
 - **BAL:** Saves return address (`PC + 1`) into link register, then jumps to target. Used for function calls; return is typically `BAL $x, 0($link_reg)`.
+
+#### Branch Encoding and Program Length Limit
+
+The original snxasm assembler encodes label-based branches (BZ, BAL) by directly adding the target label's PC value to the instruction word **without masking**. Since the opcode occupies bits 15–12 and the register field occupies bits 11–10, the target PC must fit within the lower 10 bits (bits 9–0) to avoid corrupting the instruction encoding.
+
+This means:
+- **Programs must be fewer than 1024 instructions** for branch encoding to work correctly.
+- This Python implementation follows the same encoding scheme for compatibility with snxasm-generated binaries.
 
 ### Simulator Implementation Status
 

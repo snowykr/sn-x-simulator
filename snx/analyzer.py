@@ -122,6 +122,7 @@ class Analyzer:
             self._check_register_bounds(inst, line.line_no)
             self._check_label_refs(inst, line.line_no)
             self._check_memory_bounds(inst, line.line_no)
+            self._check_immediate_range(inst, line.line_no)
 
             inst_ir = InstructionIR(
                 opcode=inst.opcode,
@@ -219,6 +220,29 @@ class Analyzer:
                     "M001",
                     f"Memory address {ea} (0x{ea:04X}) is out of bounds "
                     f"(mem_size={self._mem_size})",
+                    operand.span,
+                )
+
+    def _check_immediate_range(self, inst: InstructionNode, line_no: int) -> None:
+        if inst.opcode in (Opcode.BZ,):
+            return
+
+        if inst.opcode == Opcode.BAL:
+            if len(inst.operands) >= 2 and isinstance(inst.operands[1], LabelRefOperand):
+                return
+
+        for operand in inst.operands:
+            if not isinstance(operand, AddressOperand):
+                continue
+
+            offset = operand.offset
+            if offset < -128 or offset > 255:
+                truncated = offset & 0xFF
+                self._diagnostics.add_line_warning(
+                    line_no,
+                    "I001",
+                    f"Immediate value {offset} is outside 8-bit range (-128 to 255); "
+                    f"will be truncated to {truncated} (0x{truncated:02X}) during encoding",
                     operand.span,
                 )
 

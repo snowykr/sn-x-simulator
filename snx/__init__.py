@@ -6,6 +6,16 @@ from snx.cfg import CFG, build_cfg
 from snx.dataflow import DataflowResult, analyze_dataflow
 from snx.checker import check_program, CheckResult
 from snx.word import word, signed16, WORD_MASK, WORD_BITS
+from snx.encoding import (
+    encode_instruction,
+    encode_program,
+    decode_word,
+    format_hex,
+    format_intel_hex,
+    OPCODE_TO_INT,
+    INT_TO_OPCODE,
+    EncodingError,
+)
 
 __all__ = [
     "SNXSimulator",
@@ -25,4 +35,12 @@ __all__ = [
     "signed16",
     "WORD_MASK",
     "WORD_BITS",
+    "encode_instruction",
+    "encode_program",
+    "decode_word",
+    "format_hex",
+    "format_intel_hex",
+    "OPCODE_TO_INT",
+    "INT_TO_OPCODE",
+    "EncodingError",
 ]
