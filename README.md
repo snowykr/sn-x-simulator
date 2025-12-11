@@ -1,8 +1,8 @@
-# SN-X Simulator
+# SN/X Simulator
 
 ## Overview
 
-SN-X Simulator is a Python toolchain (assembler, static analyzer, and simulator) for the **SN/X architecture**, a 16-bit educational RISC processor designed by **Naohiko Shimizu**.
+SN/X Simulator is a Python toolchain (assembler, static analyzer, and simulator) for the **SN/X architecture**, a 16-bit educational RISC processor designed by **Naohiko Shimizu**.
 
 This document includes a concise technical summary of the SN/X architecture and this Python implementation.
 
@@ -11,34 +11,86 @@ This document includes a concise technical summary of the SN/X architecture and 
 - Python 3.11 or higher
 - [uv](https://github.com/astral-sh/uv)
 
-## Installation
+## Quick Start
 
 1. Install uv (if not already installed)
+
+   **macOS / Linux:**
    ```bash
-   pip install uv
-   ```
-2. Create and activate a virtual environment
-   ```bash
-   uv venv
-   source .venv/bin/activate
-   ```
-3. Install project dependencies
-   ```bash
-   uv pip install -e .
+   curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
-## Running the Sample Program
+   **Windows (PowerShell):**
+   ```powershell
+   powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
 
-Run the main script to run static analysis and, if there are no errors, execute a sample assembly program and view the trace table:
+2. Run the example program:
+
+   **Option A: uv run (recommended)**
+   ```bash
+   uv run snx sample.s
+   ```
+   
+   **Option B: Activate virtual environment first**
+   ```bash
+   uv sync
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   snx sample.s
+   ```
+
+uv automatically manages the Python version and virtual environment. The repository includes `sample.s` as an example program.
+
+## Development Setup (optional)
+
+If you want to set up a local development environment (e.g., for IDE integration or contributing to this project):
+
 ```bash
-uv run python main.py
+uv sync
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-The script will first print the static analysis result (errors and warnings). If any errors are reported, execution is aborted before the simulator runs.
+After this setup, you can run programs directly:
+```bash
+snx sample.s            # Run the example program
+snx path/to/program.s   # Run any .s file
+```
+
+## Usage
+
+```
+Usage: snx PATH
+
+  PATH    Path to an SN/X assembly source file (.s)
+
+Examples:
+  snx sample.s
+  snx ./examples/fib.s
+  snx ~/snx-programs/demo.s
+```
+
+### Running with uv (recommended)
+```bash
+uv run snx sample.s
+uv run snx path/to/program.s
+```
+
+### Running with activated virtual environment
+```bash
+uv sync
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+snx sample.s
+snx path/to/program.s
+```
+
+The command will:
+1. Parse and compile the assembly source
+2. Run static analysis (errors and warnings)
+3. If no errors, execute the program and display a trace table
 
 ## Static Analysis and Diagnostics
 
-The SN-X toolchain performs several static checks before executing a program, similar in spirit to `go build` or `cargo check`:
+The SN/X toolchain performs several static checks before executing a program, similar in spirit to `go build` or `cargo check`:
 
 - **Syntax and basic semantics**: unknown instructions, invalid operand counts/types, register index bounds, undefined or duplicate labels.
 - **Memory bounds checking**: absolute addresses (`base == $0`) that exceed `mem_size` are flagged as errors (code `M001`).
