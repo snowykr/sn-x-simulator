@@ -2,12 +2,18 @@
 name = "snx-simulator"
 version = "0.2.4"
 description = "sn/x architecture assembly code simulator"
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.11"
 dependencies = []
 license = { file = "LICENSE" }
 classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
+
+[project.urls]
+Homepage = "https://github.com/snowykr/snx-simulator"
+Source = "https://github.com/snowykr/snx-simulator"
+Documentation = "https://github.com/snowykr/snx-simulator#documentation"
 
 [project.scripts]
 snx = "snx.cli:main"
