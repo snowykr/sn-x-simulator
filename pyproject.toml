@@ -4,6 +4,10 @@ version = "0.2.2"
 description = "sn/x architecture assembly code simulator"
 requires-python = ">=3.11"
 dependencies = []
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+]
 
 [project.scripts]
 snx = "snx.cli:main"
