@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Sequence
 
@@ -10,10 +11,8 @@ from snx.runner import run_program_from_file
 
 def _get_version() -> str:
     try:
-        from importlib.metadata import version
-
         return version("snx-simulator")
-    except Exception:
+    except PackageNotFoundError:
         return "dev"
 
 
