@@ -22,26 +22,33 @@ A Python toolchain (assembler, static analyzer, and simulator) for the **SN/X ar
 ## Requirements
 
 - Python 3.11 or higher
-- [uv](https://github.com/astral-sh/uv)
+- [uv](https://github.com/astral-sh/uv) (recommended)
 
 ## Quick Start
 
 **Option 1 — One-off execution (no install):**
 
 ```bash
-uvx --from git+https://github.com/snowykr/snx-simulator.git snx sample.s
+uvx snx-simulator sample.s
 ```
 
-**Option 2 — Global install:**
+**Option 2 — Global install via uv:**
 
 ```bash
-uv tool install git+https://github.com/snowykr/snx-simulator.git
+uv tool install snx-simulator
+snx sample.s
+```
+
+**Option 3 — Install via pip:**
+
+```bash
+pip install snx-simulator
 snx sample.s
 ```
 
 ## Installation
 
-### Install uv
+### Install uv (Recommended)
 
 **macOS / Linux:**
 ```bash
@@ -53,15 +60,15 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-### Global Installation
+### Global Installation (uv)
 
 Install `snx` as a system-wide command:
 
 ```bash
-uv tool install git+https://github.com/snowykr/snx-simulator.git
+uv tool install snx-simulator
 ```
 
-Or from a local clone:
+Or from a local clone (for development):
 
 ```bash
 git clone https://github.com/snowykr/snx-simulator.git
@@ -79,6 +86,12 @@ To uninstall:
 
 ```bash
 uv tool uninstall snx-simulator
+```
+
+### Install via pip
+
+```bash
+pip install snx-simulator
 ```
 
 ### Project-local / Development Setup

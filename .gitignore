@@ -23,3 +23,8 @@ uv.lock
 
 # Logs
 *.log
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
