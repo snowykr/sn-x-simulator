@@ -163,16 +163,16 @@ sim.run()
 print(f"Final registers: {sim.regs}")
 ```
 
-See [Python API documentation](docs/python-api.md) for full reference.
+See [Python API documentation](https://github.com/snowykr/snx-simulator/blob/main/docs/python-api.md) for full reference.
 
 ## Documentation
 
 | Document | Description |
 |----------|-------------|
-| [Architecture](docs/architecture.md) | SN/X processor specifications, instruction formats, ISA reference |
-| [Assembly Language](docs/assembly-language.md) | Syntax, grammar, operand types |
-| [Python API](docs/python-api.md) | Library usage, `compile_program`, `SNXSimulator` |
-| [Static Analysis](docs/static-analysis.md) | Diagnostic codes, CFG, dataflow analysis |
+| [Architecture](https://github.com/snowykr/snx-simulator/blob/main/docs/architecture.md) | SN/X processor specifications, instruction formats, ISA reference |
+| [Assembly Language](https://github.com/snowykr/snx-simulator/blob/main/docs/assembly-language.md) | Syntax, grammar, operand types |
+| [Python API](https://github.com/snowykr/snx-simulator/blob/main/docs/python-api.md) | Library usage, `compile_program`, `SNXSimulator` |
+| [Static Analysis](https://github.com/snowykr/snx-simulator/blob/main/docs/static-analysis.md) | Diagnostic codes, CFG, dataflow analysis |
 
 ## License
 
